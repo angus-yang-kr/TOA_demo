@@ -1,4 +1,4 @@
-{
+[{
   "feature_keys": [
     "convenience_dim_perc",
     "quality_dim_perc",
@@ -16,3 +16,4 @@
   "score_weight": 0.5,
   "price_weight": 0.5
 }
+]
