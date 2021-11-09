@@ -1,0 +1,18 @@
+{
+  "feature_keys": [
+    "convenience_dim_perc",
+    "quality_dim_perc",
+    "health_dim_perc",
+    "price_dim_perc",
+    "inspiration_dim_perc",
+    "vegan_dim_perc",
+    "paleo_dim_perc",
+    "keto_dim_perc",
+    "current_digseg_numeric"
+  ],
+  "slot_ids": [11025, 11030, 11035, 11040, 11055, 11060, 11100, 11105, 11115, 11120,
+                  11125, 11135, 11140, 11200, 11205, 11210, 11215],
+  "premium_placements": [75, 76, 77],
+  "score_weight": 0.5,
+  "price_weight": 0.5
+}
