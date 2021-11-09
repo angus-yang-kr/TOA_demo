@@ -17,7 +17,7 @@ import java.util.List;
 
 // once again, this is now labeled a bean, same as @component but service is clearly labelled
 @Service
-public class PersonService {
+public class ScoringService {
     private final HouseholdsModel householdsModel;
     private final ScoringModel scoringModel;
     private final DimensionsModel dimensionsModel;
@@ -25,7 +25,7 @@ public class PersonService {
     private final ObjectMapper objectMapper;
 
     @Autowired
-    public PersonService(
+    public ScoringService(
             HouseholdsModel householdsModel,
             ScoringModel scoringModel,
             DimensionsModel dimensionsModel,

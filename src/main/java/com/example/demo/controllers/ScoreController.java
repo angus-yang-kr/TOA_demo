@@ -1,13 +1,10 @@
 package com.example.demo.controllers;
 
-import com.example.demo.domains.Dates;
-import com.example.demo.service.PersonService;
+import com.example.demo.service.ScoringService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 
 @RequestMapping(
@@ -16,16 +13,16 @@ import java.util.List;
 @RestController
 public class ScoreController {
 
-    private final PersonService personService;
+    private final ScoringService scoringService;
     // this is init PersonController to take in this service
     @Autowired
-    public ScoreController(PersonService personService) {
-        this.personService = personService;
+    public ScoreController(ScoringService scoringService) {
+        this.scoringService = scoringService;
     }
 
     @GetMapping()
     public String getSomePeople(@RequestParam String ehhn, String creatives) throws JsonProcessingException {
-        return personService.getSomePeople(ehhn, creatives);
+        return scoringService.getSomePeople(ehhn, creatives);
     }
 
 }
