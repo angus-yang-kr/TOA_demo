@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 public class ScoreController {
 
     private final ScoringService scoringService;
-    // this is init PersonController to take in this service
+    // this is init ScoringController to take in this service
     @Autowired
     public ScoreController(ScoringService scoringService) {
         this.scoringService = scoringService;

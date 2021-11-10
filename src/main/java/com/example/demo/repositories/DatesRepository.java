@@ -13,7 +13,7 @@ import java.util.List;
 @Repository("dates")
 public class DatesRepository implements DatesModel {
 
-    String jsonString = "/Users/a518215/IdeaProjects/demo/src/main/resources/static/dates.json";
+    String jsonString = "/Users/a518215/IdeaProjects/demo/src/main/resources/static/dates_sample.json";
     ObjectMapper mapper = new ObjectMapper();
     List<Dates> DB = Arrays.asList(mapper.readValue(Paths.get(jsonString).toFile(), Dates[].class));
 
