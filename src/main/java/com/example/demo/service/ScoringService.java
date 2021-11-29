@@ -14,7 +14,12 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 
 // once again, this is now labeled a bean, same as @component but service is clearly labelled
 @Service
@@ -53,6 +58,24 @@ public class ScoringService {
         return date_context;
     }
 
+    public Map<String, Float> get_household_attributes(String ehhn, List<Households> householdsRepository, Scoring scoringRepository) {
+        // finds ehhn in household repo and
+        String[] feature_keys = scoringRepository.getFeature_keys();
+        Float[] features = new Float[13];
+        for (Households household: householdsRepository) {
+            System.out.println("this is household: " + household.getEhhn());
+            if (household.getEhhn().equals(ehhn)) {
+                System.out.println("we have a match");
+                features = household.getFeatures();
+            }
+        }
+        Float[] finalFeatures = features;
+        Map<String, Float>  household_attributes = IntStream.range(0, feature_keys.length).boxed()
+                .collect(Collectors.toMap(i -> feature_keys[i], i -> finalFeatures[i]));
+
+        return household_attributes;
+    }
+
     public Float get_score_based_on_weights_only(Creatives creative, Scoring scoringRepository) {
         float score = (float)creative.getClearingPrice() / 1000000;
         Integer placementId = Integer.parseInt(creative.getPlacementId());
@@ -81,8 +104,17 @@ public class ScoringService {
         System.out.println("here is the dimension: " + creativeDimensionsRepository.get(0).getDestination_upcs());
         System.out.println("here is the scoring: " + Arrays.stream(scoringRepository.get(0).getPremium_placements()).anyMatch(num -> num.equals(55)));
         System.out.println("here is the households: " + householdsRepository.get(0).getEhhn());
+
+        // retrieve the fake score
         float output = get_score_based_on_weights_only(incoming_package.get(0), scoringRepository.get(0));
         System.out.println("here is the fake score: " + output);
+
+        // retrieve household features
+        Map<String, Float> household_attributes = get_household_attributes(ehhn, householdsRepository, scoringRepository.get(0));
+        household_attributes.entrySet().forEach(entry -> {
+            System.out.println(entry.getKey() + " " + entry.getValue());
+        });
+
         return "something";
     }
 }
