@@ -39,6 +39,7 @@ public class ScoringService {
         this.objectMapper = objectMapper;
     }
 
+    // put error check if dates not found
     public Dates getDateContext(List<Dates> dates) {
         DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
         LocalDateTime today = LocalDateTime.now();
@@ -51,13 +52,23 @@ public class ScoringService {
         date_context.setHour(today.getHour());
         return date_context;
     }
+
+    public Float get_score_based_on_weights_only(Creatives creative, Scoring scoringRepository) {
+        float score = (float)creative.getClearingPrice() / 1000000;
+        Integer placementId = Integer.parseInt(creative.getPlacementId());
+        boolean score_boost = Arrays.stream(scoringRepository.getPremium_placements()).anyMatch(num -> num.equals(placementId));
+        float score_boost_final = score_boost ? 1.0f : 0.0f;
+        return score + score_boost_final;
+    }
+
     public String getSomePeople(String ehhn, String creatives) throws JsonProcessingException {
-        List<Dates> from_list = datesModel.selectAllDates();
-        List<Dimensions> from_list_2 = dimensionsModel.selectAllDimensions();
-        List<Scoring> from_list_3 = scoringModel.selectAllScoring();
-        List<Households> from_list_4 = householdsModel.selectAllHouseholds();
+        List<Dates> dateRepository = datesModel.selectAllDates();
+        List<Dimensions> creativeDimensionsRepository = dimensionsModel.selectAllDimensions();
+        List<Scoring> scoringRepository = scoringModel.selectAllScoring();
+        List<Households> householdsRepository = householdsModel.selectAllHouseholds();
         List<Creatives> incoming_package = Arrays.asList(objectMapper.readValue(creatives, Creatives[].class));
 
+        // this will loop through the incoming creatives and score individually
         for (Creatives newthing: incoming_package) {
             System.out.println("this is from input: " + ehhn
                     + " " + newthing.getId()
@@ -65,11 +76,13 @@ public class ScoringService {
                     + " " + newthing.getSlotId()
                     + " " + newthing.getPlacementId());
         }
-        System.out.println("here is the hour: " + getDateContext(from_list).getHour());
-        System.out.println("here is the first date: " + from_list.get(0).getDay_of_week_short_name());
-        System.out.println("here is the dimension: " + from_list_2.get(0).getDestination_upcs()[0]);
-        System.out.println("here is the scoring: " + from_list_3.get(0).getFeature_keys()[0]);
-        System.out.println("here is the households: " + from_list_4.get(0).getEhhn());
+        System.out.println("here is the hour: " + getDateContext(dateRepository).getHour());
+        System.out.println("here is the first date: " + dateRepository.get(0).getDay_of_week_short_name());
+        System.out.println("here is the dimension: " + creativeDimensionsRepository.get(0).getDestination_upcs());
+        System.out.println("here is the scoring: " + Arrays.stream(scoringRepository.get(0).getPremium_placements()).anyMatch(num -> num.equals(55)));
+        System.out.println("here is the households: " + householdsRepository.get(0).getEhhn());
+        float output = get_score_based_on_weights_only(incoming_package.get(0), scoringRepository.get(0));
+        System.out.println("here is the fake score: " + output);
         return "something";
     }
 }
