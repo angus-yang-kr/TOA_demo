@@ -69,11 +69,25 @@ public class ScoringService {
                 features = household.getFeatures();
             }
         }
+
+        // TODO: this is a problem
         Float[] finalFeatures = features;
         Map<String, Float>  household_attributes = IntStream.range(0, feature_keys.length).boxed()
                 .collect(Collectors.toMap(i -> feature_keys[i], i -> finalFeatures[i]));
 
         return household_attributes;
+    }
+
+    public Dimensions get_creative_attributes(String campaign_id, List<Dimensions> creativeDimensionsRepository) {
+        campaign_id = campaign_id.replace("monetization-v1/", "");
+
+        Dimensions output = null;
+        for (Dimensions dimensions : creativeDimensionsRepository) {
+            if (dimensions.getCampaign_id().equals(campaign_id)) {
+                output = dimensions;
+            }
+        }
+        return output;
     }
 
     public Float get_score_based_on_weights_only(Creatives creative, Scoring scoringRepository) {
@@ -115,6 +129,9 @@ public class ScoringService {
             System.out.println(entry.getKey() + " " + entry.getValue());
         });
 
+        // retrieve creative features
+        Dimensions creative_output = get_creative_attributes(incoming_package.get(0).getId(), creativeDimensionsRepository);
+        System.out.println("this is the creative attribute ID: " + creative_output.getCampaign_id());
         return "something";
     }
 }

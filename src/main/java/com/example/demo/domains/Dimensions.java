@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Arrays;
 
 public class Dimensions {
+    private final String alt_text;
     private final String campaign_id;
     private final String[] destination_upcs;
     private final Float product_convenience_dim_perc_avg;
@@ -17,7 +18,8 @@ public class Dimensions {
     private final Float product_vegan_avg;
     private final String updated;
 
-    public Dimensions(@JsonProperty("campaign_id") String campaign_id,
+    public Dimensions(@JsonProperty("alt_text") String alt_text,
+                      @JsonProperty("campaign_id") String campaign_id,
                       @JsonProperty("destination_upcs") String[] destination_upcs,
                       @JsonProperty("product_convenience_dim_perc_avg") Float product_convenience_dim_perc_avg,
                       @JsonProperty("product_health_dim_perc_avg") Float product_health_dim_perc_avg,
@@ -28,6 +30,7 @@ public class Dimensions {
                       @JsonProperty("product_quality_dim_perc_avg") Float product_quality_dim_perc_avg,
                       @JsonProperty("product_vegan_avg") Float product_vegan_avg,
                       @JsonProperty("updated") String updated) {
+        this.alt_text = alt_text;
         this.campaign_id = campaign_id;
         this.destination_upcs = destination_upcs;
         this.product_convenience_dim_perc_avg = product_convenience_dim_perc_avg;
@@ -39,6 +42,10 @@ public class Dimensions {
         this.product_quality_dim_perc_avg = product_quality_dim_perc_avg;
         this.product_vegan_avg = product_vegan_avg;
         this.updated = updated;
+    }
+
+    public String getAlt_text() {
+        return alt_text;
     }
 
     public String getCampaign_id() {

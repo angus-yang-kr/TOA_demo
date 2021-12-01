@@ -13,7 +13,7 @@ import java.util.List;
 @Repository("dimensions")
 public class DimensionsRepository implements DimensionsModel {
 
-    String jsonString = "/Users/a518215/IdeaProjects/demo/src/main/resources/static/dim_sample.json";
+    String jsonString = "/Users/a518215/IdeaProjects/demo/src/main/resources/static/dimensions.json";
     ObjectMapper mapper = new ObjectMapper();
     List<Dimensions> DB = Arrays.asList(mapper.readValue(Paths.get(jsonString).toFile(), Dimensions[].class));
 
