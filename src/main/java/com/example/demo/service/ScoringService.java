@@ -98,6 +98,43 @@ public class ScoringService {
         return score + score_boost_final;
     }
 
+    public Float _get_difference_or_null_if_any_is_null(Float household_attribute, Float creative_attribute) {
+        if (household_attribute.isNaN() | creative_attribute.isNaN()) {
+            return null;
+        }
+        else {
+            return household_attribute - creative_attribute;
+        }
+    }
+
+    public Map<String, Float> _calculate_interaction_features(Map<String, Float> household_attributes, Dimensions creative_attributes) {
+        Float int_diff_price = _get_difference_or_null_if_any_is_null(household_attributes.getOrDefault("price_dim_perc", Float.NaN),
+                creative_attributes.getProduct_price_dim_perc_avg());
+
+        Float int_diff_quality = _get_difference_or_null_if_any_is_null(household_attributes.getOrDefault("quality_dim_perc", Float.NaN),
+                creative_attributes.getProduct_quality_dim_perc_avg());
+
+        Float int_diff_convenience = _get_difference_or_null_if_any_is_null(household_attributes.getOrDefault("convenience_dim_perc", Float.NaN),
+                creative_attributes.getProduct_convenience_dim_perc_avg());
+
+        Float int_diff_health = _get_difference_or_null_if_any_is_null(household_attributes.getOrDefault("health_dim_perc", Float.NaN),
+                creative_attributes.getProduct_health_dim_perc_avg());
+
+        Float int_diff_inspiration = _get_difference_or_null_if_any_is_null(household_attributes.getOrDefault("inspiration_dim_perc", Float.NaN),
+                creative_attributes.getProduct_inspiration_dim_perc_avg());
+
+
+        Map<String, Float> output = Map.of(
+                "int_diff_price", int_diff_price,
+                "int_diff_quality", int_diff_quality,
+                "int_diff_convenience", int_diff_convenience,
+                "int_diff_health", int_diff_health,
+                "int_diff_inspiration", int_diff_inspiration
+        );
+
+        return output;
+    }
+
     public String getSomePeople(String ehhn, String creatives) throws JsonProcessingException {
         List<Dates> dateRepository = datesModel.selectAllDates();
         List<Dimensions> creativeDimensionsRepository = dimensionsModel.selectAllDimensions();
@@ -130,8 +167,15 @@ public class ScoringService {
         });
 
         // retrieve creative features
-        Dimensions creative_output = get_creative_attributes(incoming_package.get(0).getId(), creativeDimensionsRepository);
-        System.out.println("this is the creative attribute ID: " + creative_output.getCampaign_id());
+        Dimensions creative_attributes = get_creative_attributes(incoming_package.get(0).getId(), creativeDimensionsRepository);
+        System.out.println("this is the creative attribute ID: " + creative_attributes.getCampaign_id());
+
+        // retrieve interaction features
+        Map<String, Float> interaction_features = _calculate_interaction_features(household_attributes, creative_attributes);
+        System.out.println("this is the int_diff_price: " + interaction_features.get("int_diff_price"));
+        System.out.println("this is the int_diff_quality: " + interaction_features.get("int_diff_quality"));
+
+
         return "something";
     }
 }

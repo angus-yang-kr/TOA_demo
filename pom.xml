@@ -27,7 +27,12 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>com.datarobot</groupId>
+            <artifactId>datarobot-prediction</artifactId>
+            <version>2.1.9</version>
+        </dependency>
+    </dependencies>
 
 	<build>
 		<plugins>
