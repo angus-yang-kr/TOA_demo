@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import com.datarobot.prediction.Predictors;
+import com.datarobot.prediction.IRegressionPredictor;
 import com.example.demo.domains.*;
 import com.example.demo.repositories.models.DatesModel;
 import com.example.demo.repositories.models.DimensionsModel;
@@ -175,6 +177,16 @@ public class ScoringService {
         System.out.println("this is the int_diff_price: " + interaction_features.get("int_diff_price"));
         System.out.println("this is the int_diff_quality: " + interaction_features.get("int_diff_quality"));
 
+        // retrieving score from the model object
+        // I added the JAR to the classpath via: https://stackoverflow.com/questions/854264/how-to-add-directory-to-classpath-in-an-application-run-profile-in-intellij-idea
+        IRegressionPredictor regression_predictor =
+                Predictors.getPredictor("60304e2e490ec09afcfb580d");
+
+        Map<String, Float > row = new HashMap<>();
+
+        double scored_value = regression_predictor.score(row);
+
+        System.out.println("here's the prediction: "+ scored_value);
 
         return "something";
     }
